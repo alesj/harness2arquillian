@@ -1,0 +1,2 @@
+This project provides a JBoss TCK Harness to Arquillian adapters.
+With this we can simply take TCK Harness test class and turn it into proper Arquillian test class / case.

@@ -1,0 +1,150 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <parent>
+      <groupId>org.jboss</groupId>
+      <artifactId>jboss-parent</artifactId>
+      <version>5</version>
+   </parent>
+   <modelVersion>4.0.0</modelVersion>
+   <groupId>org.jboss.har2arq</groupId>
+   <artifactId>har2arq</artifactId>
+   <packaging>jar</packaging>
+   <version>1.0.0-SNAPSHOT</version>
+   <name>JBoss Har2Arq</name>
+   <url>http://www.jboss.org</url>
+   <description>Harness to Arquillian translator</description>
+   <licenses>
+      <license>
+         <name>lgpl</name>
+         <url>http://repository.jboss.org/licenses/lgpl.txt</url>
+      </license>
+   </licenses>
+   <organization>
+      <name>JBoss, A division of Red Hat, Inc</name>
+      <url>http://www.jboss.org</url>
+   </organization>
+
+   <properties>
+      <harness.version>1.1.0-CR9</harness.version>
+      <shrinkwrap.version>1.0.0-alpha-11</shrinkwrap.version>
+      <arquillian.version>1.0.0.Alpha4</arquillian.version>
+      <javassist.version>3.12.1.GA</javassist.version>
+      <junint.version>4.4</junint.version>
+   </properties>
+
+   <build>
+      <sourceDirectory>src/main/java</sourceDirectory>
+      <testSourceDirectory>src/test/java</testSourceDirectory>
+      <finalName>${artifactId}</finalName>
+      <testResources>
+         <testResource>
+            <directory>src/test/resources</directory>
+         </testResource>
+      </testResources>
+      <plugins>
+
+         <!-- define how we want compilation to take place
+         here, we accept most of the defaults but say that we want the
+         optimization flag set, and define the source and target to be 1.5,
+         these setting will be inherited by child projects -->
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>2.0</version>
+            <configuration>
+               <debug>true</debug>
+               <source>1.5</source>
+               <target>1.5</target>
+            </configuration>
+         </plugin>
+         <!-- define that we wish to create src jars -->
+         <plugin>
+            <artifactId>maven-source-plugin</artifactId>
+            <inherited>true</inherited>
+            <executions>
+               <execution>
+                  <goals>
+                     <goal>jar</goal>
+                  </goals>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>2.4.3</version>
+            <configuration>
+               <forkMode>always</forkMode>
+               <!-- required to correctly run the PojoServer tests -->
+               <useSystemClassLoader>true</useSystemClassLoader>
+               <redirectTestOutputToFile>true</redirectTestOutputToFile>
+               <testFailureIgnore>true</testFailureIgnore>
+            </configuration>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-release-plugin</artifactId>
+            <version>2.0-beta-9</version>
+         </plugin>
+         <plugin>
+            <artifactId>maven-idea-plugin</artifactId>
+            <configuration>
+               <downloadSources>true</downloadSources>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
+
+   <repositories>
+      <repository>
+         <id>jboss-public-repository-group</id>
+         <name>JBoss Public Repository Group</name>
+         <url>http://repository.jboss.org/nexus/content/groups/public/</url>
+         <releases>
+            <enabled>true</enabled>
+         </releases>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
+
+   <dependencies>
+      <dependency>
+         <groupId>org.jboss.test-harness</groupId>
+         <artifactId>jboss-test-harness-api</artifactId>
+         <version>${harness.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.test-harness</groupId>
+         <artifactId>jboss-test-harness</artifactId>
+         <version>${harness.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.shrinkwrap</groupId>
+         <artifactId>shrinkwrap-impl-base</artifactId>
+         <version>${shrinkwrap.version}</version>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian</groupId>
+         <artifactId>arquillian-spi</artifactId>
+         <version>${arquillian.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>javassist</groupId>
+         <artifactId>javassist</artifactId>
+         <version>${javassist.version}</version>
+      </dependency>
+
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <version>${junint.version}</version>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+
+</project>
+
