@@ -22,35 +22,50 @@
 
 package org.jboss.har2arq.adapters;
 
+import java.io.File;
+import java.io.IOException;
+
 import org.jboss.har2arq.types.Packaging;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.testharness.impl.packaging.TCKArtifact;
 
 /**
- * Adapter context.
- * Pass info between adapters.
+ * Zip deployment adapter.
  *
  * @author <a href="mailto:ales.justin@jboss.org">Ales Justin</a>
  */
-public interface AdapterContext
+public class ZipDeploymentAdapter implements DeploymentAdapter
 {
-   /**
-    * The packaging type.
-    *
-    * @return packaging type
-    */
-   Packaging packaging();
+   public Archive adapt(AdapterContext context)
+   {
+      try
+      {
+         TCKArtifact artifact = context.initialArtifact();
+         File tempFile = File.createTempFile("har2arq", ".tmp");
+         artifact.writeArtifactToDisk(tempFile.getParent(), tempFile.getName());
+         boolean isEAR = context.packaging() == Packaging.EAR;
+         Class<? extends Archive> clazz = isEAR ? EnterpriseArchive.class : WebArchive.class;
+         Archive archive = ShrinkWrap.createFromZipFile(clazz, tempFile);
+         modifyArchive(archive);
+         return archive;
+      }
+      catch (IOException e)
+      {
+         throw new IllegalArgumentException(e);
+      }
+   }
 
    /**
-    * The initial TCK artifact.
+    * Modify archive after adaption.
     *
-    * @return tck artifact
+    * @param archive the current archive
     */
-   TCKArtifact initialArtifact();
-
-   /**
-    * Packaging type.
-    *
-    * @return packaging type
-    */
-   PackagingAdapter packagingAdapter();
+   @SuppressWarnings({"UnusedParameters"})
+   protected void modifyArchive(Archive archive)
+   {
+      // do nothing by default
+   }
 }

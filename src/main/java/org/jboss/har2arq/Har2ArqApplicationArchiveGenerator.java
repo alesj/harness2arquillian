@@ -28,8 +28,8 @@ import org.jboss.arquillian.spi.ApplicationArchiveGenerator;
 import org.jboss.arquillian.spi.TestClass;
 import org.jboss.har2arq.adapters.AdapterContext;
 import org.jboss.har2arq.adapters.DefaultAdapterContext;
-import org.jboss.har2arq.adapters.DefaultDeploymentAdapter;
 import org.jboss.har2arq.adapters.DeploymentAdapter;
+import org.jboss.har2arq.adapters.ZipDeploymentAdapter;
 import org.jboss.shrinkwrap.api.Archive;
 
 /**
@@ -51,7 +51,7 @@ public class Har2ArqApplicationArchiveGenerator implements ApplicationArchiveGen
          break;
       }
       if (deploymentAdapter == null)
-         deploymentAdapter = new DefaultDeploymentAdapter();
+         deploymentAdapter = new ZipDeploymentAdapter();
    }
 
    /**
