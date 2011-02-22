@@ -3,7 +3,6 @@ package org.jboss.har2arq.containers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.zip.ZipInputStream;
@@ -28,11 +27,9 @@ import org.jboss.testharness.spi.Containers;
  * {@link Containers}
  *
  * @author Stuart Douglas
- *
  */
 public class ArquillianContainerAdaptor implements Containers
 {
-
    private DeployableContainer container;
    private SuiteContext suiteContext;
    private ClassContext context;
@@ -70,7 +67,6 @@ public class ArquillianContainerAdaptor implements Containers
    public boolean deploy(InputStream archive, String name) throws IOException
    {
       exception = null;
-      ClassContext context = new ClassContext(suiteContext);
       if(name.endsWith("ear")) {
          swArchive = ShrinkWrap.create(EnterpriseArchive.class, name);
       } else if(name.endsWith("war")) {
@@ -83,6 +79,7 @@ public class ArquillianContainerAdaptor implements Containers
       swArchive.as(ZipImporter.class).importZip(new ZipInputStream(archive));
       try
       {
+         context = new ClassContext(suiteContext);
          container.deploy(context, this.swArchive);
          return true;
       }
@@ -129,14 +126,13 @@ public class ArquillianContainerAdaptor implements Containers
       // first we need to load the deployable containers
       final ServiceLoader<DeployableContainer> container = ServiceLoader.load(DeployableContainer.class);
       final Set<DeployableContainer> containers = new HashSet<DeployableContainer>();
-      final Iterator<DeployableContainer> iterator = container.iterator();
-      while (iterator.hasNext())
+      for (DeployableContainer aContainer : container)
       {
-         containers.add(iterator.next());
+         containers.add(aContainer);
       }
       if (containers.isEmpty())
       {
-         throw new RuntimeException("No arquillian DeployableContainer found on the class path.");
+         throw new RuntimeException("No Arquillian DeployableContainer found on the class path.");
       }
       if (containers.size() > 1)
       {
@@ -144,6 +140,4 @@ public class ArquillianContainerAdaptor implements Containers
       }
       return containers.iterator().next();
    }
-
-
 }

@@ -22,14 +22,13 @@
 
 package org.jboss.har2arq.adapters;
 
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.zip.ZipInputStream;
 
-import org.jboss.har2arq.types.Packaging;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.api.importer.ZipImporter;
 import org.jboss.testharness.impl.packaging.TCKArtifact;
 
 /**
@@ -45,10 +44,17 @@ public class ZipDeploymentAdapter implements DeploymentAdapter
       try
       {
          TCKArtifact artifact = context.initialArtifact();
-         File tempFile = File.createTempFile("har2arq", ".tmp");
-         artifact.writeArtifactToDisk(tempFile.getParent(), tempFile.getName());
          Class<? extends Archive> clazz = context.packagingAdapter().archiveClass();
-         Archive archive = ShrinkWrap.createFromZipFile(clazz, tempFile);
+         Archive archive = ShrinkWrap.create(clazz, artifact.getDefaultName());
+         InputStream stream = artifact.getJarAsStream();
+         try
+         {
+            archive.as(ZipImporter.class).importZip(new ZipInputStream(stream));
+         }
+         finally
+         {
+            stream.close();
+         }
          modifyArchive(archive);
          return archive;
       }
