@@ -35,6 +35,13 @@ import org.jboss.testharness.impl.packaging.TCKArtifact;
 public interface PackagingAdapter<T extends TCKArtifact, U extends Archive>
 {
    /**
+    * The archive class.
+    *
+    * @return archive class
+    */
+   Class<U> archiveClass();
+
+   /**
     * Validate artifact instance.
     *
     * @param artifact the artifact instance

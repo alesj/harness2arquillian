@@ -53,27 +53,6 @@ public class DefaultAdapterContext implements AdapterContext
       this.testClass = testClass;
    }
 
-   public Packaging packaging()
-   {
-      if (packaging == null)
-      {
-         org.jboss.testharness.impl.packaging.Packaging p = testClass().getAnnotation(org.jboss.testharness.impl.packaging.Packaging.class);
-         if (p != null)
-         {
-            PackagingType pt = p.value();
-            if (pt == PackagingType.WAR)
-               packaging = Packaging.WAR;
-            else if (pt == PackagingType.EAR)
-               packaging = Packaging.EAR;
-         }
-         else
-         {
-            packaging = defaultPackaging;
-         }
-      }
-      return packaging;
-   }
-
    public TCKArtifact initialArtifact()
    {
       if (artifact == null)
@@ -96,6 +75,27 @@ public class DefaultAdapterContext implements AdapterContext
    protected Class<?> testClass()
    {
       return testClass.getJavaClass();
+   }
+
+   protected Packaging packaging()
+   {
+      if (packaging == null)
+      {
+         org.jboss.testharness.impl.packaging.Packaging p = testClass().getAnnotation(org.jboss.testharness.impl.packaging.Packaging.class);
+         if (p != null)
+         {
+            PackagingType pt = p.value();
+            if (pt == PackagingType.WAR)
+               packaging = Packaging.WAR;
+            else if (pt == PackagingType.EAR)
+               packaging = Packaging.EAR;
+         }
+         else
+         {
+            packaging = defaultPackaging;
+         }
+      }
+      return packaging;
    }
 
    protected JSR jsr()

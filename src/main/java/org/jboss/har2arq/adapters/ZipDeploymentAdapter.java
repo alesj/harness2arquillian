@@ -39,6 +39,7 @@ import org.jboss.testharness.impl.packaging.TCKArtifact;
  */
 public class ZipDeploymentAdapter implements DeploymentAdapter
 {
+   @SuppressWarnings({"unchecked"})
    public Archive adapt(AdapterContext context)
    {
       try
@@ -46,8 +47,7 @@ public class ZipDeploymentAdapter implements DeploymentAdapter
          TCKArtifact artifact = context.initialArtifact();
          File tempFile = File.createTempFile("har2arq", ".tmp");
          artifact.writeArtifactToDisk(tempFile.getParent(), tempFile.getName());
-         boolean isEAR = context.packaging() == Packaging.EAR;
-         Class<? extends Archive> clazz = isEAR ? EnterpriseArchive.class : WebArchive.class;
+         Class<? extends Archive> clazz = context.packagingAdapter().archiveClass();
          Archive archive = ShrinkWrap.createFromZipFile(clazz, tempFile);
          modifyArchive(archive);
          return archive;

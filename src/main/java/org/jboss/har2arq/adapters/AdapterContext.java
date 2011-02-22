@@ -34,13 +34,6 @@ import org.jboss.testharness.impl.packaging.TCKArtifact;
 public interface AdapterContext
 {
    /**
-    * The packaging type.
-    *
-    * @return packaging type
-    */
-   Packaging packaging();
-
-   /**
     * The initial TCK artifact.
     *
     * @return tck artifact

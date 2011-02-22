@@ -46,6 +46,11 @@ public abstract class AbstractPackagingAdapter<T extends TCKArtifact, U extends 
       this.archiveClass = archiveClass;
    }
 
+   public Class<U> archiveClass()
+   {
+      return archiveClass;
+   }
+
    public void validate(TCKArtifact artifact)
    {
       if (artifactClass.isInstance(artifact) == false)
