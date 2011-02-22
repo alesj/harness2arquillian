@@ -131,6 +131,11 @@
          <artifactId>arquillian-spi</artifactId>
          <version>${arquillian.version}</version>
       </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian</groupId>
+         <artifactId>arquillian-impl-base</artifactId>
+         <version>${arquillian.version}</version>
+      </dependency>
 
       <dependency>
          <groupId>javassist</groupId>
