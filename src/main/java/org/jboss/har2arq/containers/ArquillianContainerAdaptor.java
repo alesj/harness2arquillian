@@ -1,5 +1,6 @@
 package org.jboss.har2arq.containers;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashSet;
@@ -7,10 +8,12 @@ import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.zip.ZipInputStream;
 
+
 import org.jboss.arquillian.impl.DynamicServiceLoader;
 import org.jboss.arquillian.impl.XmlConfigurationBuilder;
 import org.jboss.arquillian.impl.context.ClassContext;
 import org.jboss.arquillian.impl.context.SuiteContext;
+import org.jboss.arquillian.spi.Configuration;
 import org.jboss.arquillian.spi.DeployableContainer;
 import org.jboss.arquillian.spi.LifecycleException;
 import org.jboss.shrinkwrap.api.Archive;
@@ -21,6 +24,7 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.testharness.api.DeploymentException;
 import org.jboss.testharness.spi.Containers;
+
 
 /**
  * Adaptor between an arquillian {@link DeployableContainer} and test harnesses
@@ -33,6 +37,7 @@ public class ArquillianContainerAdaptor implements Containers
    private DeployableContainer container;
    private SuiteContext suiteContext;
    private ClassContext context;
+   private Configuration configuration;
    private Archive<?> swArchive;
    private org.jboss.arquillian.spi.DeploymentException exception;
 
@@ -41,7 +46,8 @@ public class ArquillianContainerAdaptor implements Containers
       container = loadDeployableContainer();
       suiteContext = new SuiteContext(new DynamicServiceLoader());
       XmlConfigurationBuilder builder = new XmlConfigurationBuilder();
-      container.setup(suiteContext, builder.build());
+      configuration = builder.build();
+      container.setup(suiteContext, configuration);
       try
       {
          container.start(suiteContext);
@@ -67,6 +73,8 @@ public class ArquillianContainerAdaptor implements Containers
    public boolean deploy(InputStream archive, String name) throws IOException
    {
       exception = null;
+      ClassContext context = new ClassContext(suiteContext);
+      context.add(Configuration.class,configuration);
       if(name.endsWith("ear")) {
          swArchive = ShrinkWrap.create(EnterpriseArchive.class, name);
       } else if(name.endsWith("war")) {
