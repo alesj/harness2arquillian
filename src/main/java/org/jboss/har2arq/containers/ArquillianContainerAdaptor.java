@@ -1,14 +1,6 @@
 package org.jboss.har2arq.containers;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashSet;
-import java.util.ServiceLoader;
-import java.util.Set;
-import java.util.zip.ZipInputStream;
-
-
 import org.jboss.arquillian.impl.DynamicServiceLoader;
 import org.jboss.arquillian.impl.XmlConfigurationBuilder;
 import org.jboss.arquillian.impl.context.ClassContext;
@@ -24,6 +16,13 @@ import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.testharness.api.DeploymentException;
 import org.jboss.testharness.spi.Containers;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.HashSet;
+import java.util.ServiceLoader;
+import java.util.Set;
+import java.util.zip.ZipInputStream;
 
 
 /**
@@ -87,7 +86,6 @@ public class ArquillianContainerAdaptor implements Containers
       swArchive.as(ZipImporter.class).importZip(new ZipInputStream(archive));
       try
       {
-         context = new ClassContext(suiteContext);
          container.deploy(context, this.swArchive);
          return true;
       }
