@@ -72,8 +72,8 @@ public class ArquillianContainerAdaptor implements Containers
    public boolean deploy(InputStream archive, String name) throws IOException
    {
       exception = null;
-      ClassContext context = new ClassContext(suiteContext);
-      context.add(Configuration.class,configuration);
+      context = new ClassContext(suiteContext);
+      context.add(Configuration.class, configuration);
       if(name.endsWith("ear")) {
          swArchive = ShrinkWrap.create(EnterpriseArchive.class, name);
       } else if(name.endsWith("war")) {
